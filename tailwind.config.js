@@ -9,7 +9,9 @@ module.exports = {
       fontFamily: {
         space: ['Space Grotesk', ...defaultTheme.fontFamily.sans],
       },
-      screens: {},
+      screens: {
+        '925': '925px'
+      },
     },
   },
   plugins: [
