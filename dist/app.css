@@ -1004,6 +1004,10 @@ select {
   font-weight: 500;
 }
 
+.uppercase {
+  text-transform: uppercase;
+}
+
 .text-\[\#21092F\] {
   --tw-text-opacity: 1;
   color: rgb(33 9 47 / var(--tw-text-opacity));
