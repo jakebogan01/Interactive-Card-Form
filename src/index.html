@@ -60,39 +60,62 @@
                     </div>
                 </div>
             </div>
-            <form class="flex 925:items-center py-10 px-6 max-w-[25.3125rem] mx-auto">
+            <form
+                    method="POST"
+                    x-data="validateForm()"
+                    x-init="
+                    $watch('name', value => { validate('name') })
+                    $watch('card', value => { validate('card') })
+                    $watch('month', value => { validate('month') })
+                    $watch('year', value => { validate('year') })
+                    $watch('cvc', value => { validate('cvc') })
+                    "
+                    class="flex 925:items-center py-10 px-6 max-w-[25.3125rem] mx-auto">
                 <div>
                     <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-4">
                         <div class="col-span-6">
-                            <label for="name" class="block text-sm font-medium text-[#21092F]">CARDHOLDER NAME</label>
+                            <label for="name" class="block text-sm font-medium text-[#21092F] tracking-widest">CARDHOLDER NAME</label>
                             <div class="mt-1">
-                                <input x-model="name" type="text" name="name" id="name" autocomplete="given-name" class="block w-full rounded-lg border-[#DFDEE0] placeholder-[#C6C1CA] shadow-sm focus:border-[#5D3DE0] focus:ring-[#5D3DE0] text-[#21092F]" placeholder="e.g. Jane Appleseed">
+                                <input x-model="name" minlength="8" maxlength="28" type="text" name="name" id="name" autocomplete="given-name" class="block w-full rounded-lg border-[#DFDEE0] placeholder-[#C6C1CA] shadow-sm focus:border-[#5D3DE0] focus:ring-[#5D3DE0] text-[#21092F]" placeholder="e.g. Jane Appleseed" required>
                             </div>
+                            <span class="text-sm text-red-500">
+                                <span x-text="validation.name.message"></span>
+                            </span>
                         </div>
 
                         <div class="col-span-6">
-                            <label for="card-number" class="block text-sm font-medium text-[#21092F]">CARD NUMBER</label>
+                            <label for="card-number" class="block text-sm font-medium text-[#21092F] tracking-widest">CARD NUMBER</label>
                             <div class="mt-1">
-                                <input x-model="card" type="text" name="card-number" id="card-number" autocomplete="card-number" class="block w-full rounded-lg border-[#DFDEE0] placeholder-[#C6C1CA] shadow-sm focus:border-[#5D3DE0] focus:ring-[#5D3DE0] text-[#21092F]" placeholder="e.g. 1234 5678 9123 0000">
+                                <input x-model="card" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" pattern="[0-9]+" minlength="19" maxlength="19" type="text" name="card-number" id="card-number" autocomplete="card-number" class="block w-full rounded-lg border-[#DFDEE0] placeholder-[#C6C1CA] shadow-sm focus:border-[#5D3DE0] focus:ring-[#5D3DE0] text-[#21092F]" placeholder="e.g. 1234 5678 9123 0000" required>
                             </div>
+                            <span class="text-sm text-red-500">
+                                <span x-text="validation.card.message"></span>
+                            </span>
                         </div>
                     </div>
 
                     <div class="mt-6 grid grid-cols-6 gap-y-6 gap-x-3">
                         <div class="col-span-3">
-                            <label for="month" class="block text-sm font-medium text-[#21092F]">EXP. DATE (MM/YY)</label>
+                            <label for="month" class="block text-sm font-medium text-[#21092F] tracking-widest">EXP. DATE (MM/YY)</label>
                             <label for="year" class="sr-only">(MM/YY)</label>
                             <div class="flex space-x-3 mt-1">
-                                <input x-model="month" type="text" name="month" id="month" autocomplete="month" class="block w-full max-w-[5rem] rounded-lg border-[#DFDEE0] placeholder-[#C6C1CA] shadow-sm focus:border-[#5D3DE0] focus:ring-[#5D3DE0] text-[#21092F]" placeholder="MM">
-                                <input x-model="year" type="text" name="year" id="year" autocomplete="year" class="block w-full max-w-[5rem] rounded-lg border-[#DFDEE0] placeholder-[#C6C1CA] shadow-sm focus:border-[#5D3DE0] focus:ring-[#5D3DE0] text-[#21092F]" placeholder="YY">
+                                <input x-model="month" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" pattern="[0-9]+" minlength="2" maxlength="2" type="text" name="month" id="month" autocomplete="month" class="block w-full max-w-[5rem] rounded-lg border-[#DFDEE0] placeholder-[#C6C1CA] shadow-sm focus:border-[#5D3DE0] focus:ring-[#5D3DE0] text-[#21092F]" placeholder="MM" required>
+                                <input x-model="year" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" pattern="[0-9]+" minlength="2" maxlength="2" type="text" name="year" id="year" autocomplete="year" class="block w-full max-w-[5rem] rounded-lg border-[#DFDEE0] placeholder-[#C6C1CA] shadow-sm focus:border-[#5D3DE0] focus:ring-[#5D3DE0] text-[#21092F]" placeholder="YY" required>
                             </div>
+                            <span class="text-sm text-red-500">
+                                <span x-text="validation.month.message"></span><br>
+                                <span x-text="validation.year.message"></span>
+                            </span>
                         </div>
 
                         <div class="col-span-3">
-                            <label for="cvc" class="block text-sm font-medium text-[#21092F]">CVC</label>
+                            <label for="cvc" class="block text-sm font-medium text-[#21092F] tracking-widest">CVC</label>
                             <div class="mt-1">
-                                <input x-model="cvc" type="text" name="cvc" id="cvc" autocomplete="cvc" class="block w-full max-w-[11.9375rem] rounded-lg border-[#DFDEE0] placeholder-[#C6C1CA] shadow-sm focus:border-[#5D3DE0] focus:ring-[#5D3DE0] text-[#21092F]" placeholder="e.g. 123">
+                                <input x-model="cvc" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" pattern="[0-9]+" minlength="2" maxlength="3" type="text" name="cvc" id="cvc" autocomplete="cvc" class="block w-full max-w-[11.9375rem] rounded-lg border-[#DFDEE0] placeholder-[#C6C1CA] shadow-sm focus:border-[#5D3DE0] focus:ring-[#5D3DE0] text-[#21092F]" placeholder="e.g. 123" required>
                             </div>
+                            <span class="text-sm text-red-500">
+                                <span x-text="validation.cvc.message"></span>
+                            </span>
                         </div>
                     </div>
 
@@ -104,5 +127,120 @@
                 </div>
             </form>
         </div>
+
+        <script>
+            window.validateForm = function () {
+                return {
+                    validation: {
+                        name: {
+                            rule: {
+                                required: function (field) {
+                                    if (field) {
+                                        return { error: false, message: ''}
+                                    } else {
+                                        return { error: true, message: "Can't be blank"}
+                                    }
+                                },
+                                minLength: function (field, value = 8) {
+                                    if (field && field.length >= value) {
+                                        return { error: false, message: ''}
+                                    } else {
+                                        return { error: true, message: `This field must have minimum ${value} characters length.`}
+                                    }
+                                },
+                                maxLength: function (field, value = 26) {
+                                    if (field && field.length <= value) {
+                                        return { error: false, message: ''}
+                                    } else {
+                                        return { error: true, message: `This field cannot be more than ${value} characters length.`}
+                                    }
+                                }
+                            },
+                            error: true,
+                            message: ''
+                        },
+                        card: {
+                            rule: {
+                                required: function (field) {
+                                    if (field) {
+                                        return { error: false, message: ''}
+                                    } else {
+                                        return { error: true, message: "Can't be blank"}
+                                    }
+                                },
+                                minLength: function (field, value = 19) {
+                                    if (field && field.length >= value) {
+                                        return { error: false, message: ''}
+                                    } else {
+                                        return { error: true, message: `This field must have minimum ${value} characters length.`}
+                                    }
+                                },
+                                maxLength: function (field, value = 19) {
+                                    if (field && field.length < value) {
+                                        return { error: false, message: ''}
+                                    } else {
+                                        return { error: true, message: `This field cannot be more than ${value} characters length.`}
+                                    }
+                                }
+                            },
+                            error: true,
+                            message: ''
+                        },
+                        month: {
+                            rule: {
+                                required: function (field) {
+                                    if (field) {
+                                        return { error: false, message: ''}
+                                    } else {
+                                        return { error: true, message: "Can't be blank"}
+                                    }
+                                },
+                            },
+                            error: true,
+                            message: ''
+                        },
+                        year: {
+                            rule: {
+                                required: function (field) {
+                                    if (field) {
+                                        return { error: false, message: ''}
+                                    } else {
+                                        return { error: true, message: "Can't be blank"}
+                                    }
+                                },
+                            },
+                            error: true,
+                            message: ''
+                        },
+                        cvc: {
+                            rule: {
+                                required: function (field) {
+                                    if (field) {
+                                        return { error: false, message: ''}
+                                    } else {
+                                        return { error: true, message: "Can't be blank"}
+                                    }
+                                },
+                            },
+                            error: true,
+                            message: ''
+                        }
+                    },
+                    validate (field) {
+                        for (const key in this.validation[field].rule) {
+                            const validationResult = this.validation[field].rule[key](this[field])
+                            if (validationResult.error) {
+                                this.validation[field].error = true
+                                this.validation[field].message = validationResult.message
+                                break
+                            }
+                            this.validation[field].error = false
+                            this.validation[field].message = ''
+                            continue
+                        }
+                    }
+                }
+            }
+        </script>
     </body>
 </html>
